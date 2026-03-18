@@ -15,7 +15,12 @@
     background-color: #151B45;
   }
   h1 { text-align: center; }
-  input { padding: 10px; font-size: 18px; width: 100%; }
+  input {
+    padding: 10px;
+    font-size: 18px;
+    width: 100%;
+    box-sizing: border-box;
+  }
   button { padding: 10px; font-size: 18px; margin-top: 10px; }
   #feedback { margin-top: 10px; font-weight: bold; }
   #score { font-weight: bold; }
@@ -102,12 +107,12 @@ const tenses = {
 // ------------------ PRONOUNS ------------------
 const pronouns = ["I","You","He/She","We","You (pl.)","They"];
 
-// ------------------ ENGLISH PROMPTS ------------------
+// ------------------ ENGLISH PROMPTS (FIXED) ------------------
 const englishPrompts = {
   default: {
-    present:["","", "s","","",""],
-    imperfect:["was doing","were doing","was doing","were doing","were doing","were doing"],
-    preterite:["did","did","did","did","did","did"]
+    present:["","","","","",""],
+    imperfect:["was","were","was","were","were","were"],
+    preterite:["","","","","",""]
   },
   ser: {
     imperfect:["was (description)","were (description)","was (description)","were (description)","were (description)","were (description)"],
@@ -123,7 +128,7 @@ const englishPrompts = {
 function randomItem(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function removeAccents(s){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
 
-// ------------------ CONJUGATE ------------------
+// ------------------ CONJUGATION ------------------
 function conjugate(verb, tense, person){
   if(tenses[tense].irregulars[verb.infinitive])
     return tenses[tense].irregulars[verb.infinitive][person];
@@ -142,8 +147,7 @@ function newQuestion(){
   const tense = randomItem(Object.keys(tenses));
   const person = Math.floor(Math.random()*6);
 
-  let englishVerb = englishPrompts.default[tense]?.[person] || "";
-
+  let englishVerb = englishPrompts.default[tense][person];
   if(englishPrompts[verb.infinitive]?.[tense])
     englishVerb = englishPrompts[verb.infinitive][tense][person];
 
@@ -167,13 +171,13 @@ function checkAnswer(){
     correct++;
     document.getElementById("feedback").innerText = "Correct!";
   } else {
-    document.getElementById("feedback").innerText = `Incorrect: ${currentQuestion.answer}`;
+    document.getElementById("feedback").innerText = `Incorrect. Correct: ${currentQuestion.answer}`;
   }
-  setTimeout(newQuestion,1200);
+  setTimeout(newQuestion, 1200);
 }
 
-document.getElementById("answer").addEventListener("keydown",e=>{
-  if(e.key==="Enter") checkAnswer();
+document.getElementById("answer").addEventListener("keydown", e => {
+  if(e.key === "Enter") checkAnswer();
 });
 
 // START
