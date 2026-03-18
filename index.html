@@ -1,92 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>Spanish Conjugation Trainer</title>
+
 <style>
   body {
     font-family: Arial;
     padding: 10px;
     max-width: 600px;
     margin: auto;
-    -webkit-text-size-adjust: 100%;
-    color: #FFFFFF; 
-    background-color: #151B45; 
+    color: #FFFFFF;
+    background-color: #151B45;
   }
-
-  h1 {
-    text-align: center;
-  }
-
-  #input-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-  }
-
-  input {
-    padding: 10px;
-    font-size: 18px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  button {
-    padding: 10px 20px;
-    font-size: 18px;
-    margin-top: 10px;
-  }
-
-  #feedback {
-    margin-top: 10px;
-    font-weight: bold;
-  }
-
-  #score {
-    font-weight: bold;
-    white-space: nowrap;
-    margin: 0;
-  }
+  h1 { text-align: center; }
+  input { padding: 10px; font-size: 18px; width: 100%; }
+  button { padding: 10px; font-size: 18px; margin-top: 10px; }
+  #feedback { margin-top: 10px; font-weight: bold; }
+  #score { font-weight: bold; }
 </style>
 </head>
+
 <body>
 
 <h1>Spanish Conjugation Trainer</h1>
 <p id="prompt"></p>
 
-<div id="input-container">
-  <input id="answer" type="text" autocomplete="off">
-  <p id="score">Score: 0/0</p>
-</div>
+<input id="answer" type="text" autocomplete="off">
+<p id="score">Score: 0/0</p>
 
-<button type="button" onclick="speakSpanish(currentQuestion.correctAnswer)">🔊 Listen</button>
 <button onclick="checkAnswer()">Submit</button>
 <p id="feedback"></p>
 
 <script>
-// --- Data ---
+// ------------------ VERBS ------------------
 const verbs = [
-  { infinitive: "hablar", type: "ar", english: "speak" },
-  { infinitive: "comer", type: "er", english: "eat" },
-  { infinitive: "vivir", type: "ir", english: "live" },
-  { infinitive: "ir", type: "ir", english: "go" },
-  { infinitive: "ser", type: "ir", english: "be" },
-  { infinitive: "ver", type: "er", english: "see" },
-  { infinitive: "tener", type: "er", english: "have" },
-  { infinitive: "hacer", type: "er", english: "do/make" },
-  { infinitive: "venir", type: "ir", english: "come" },
-  { infinitive: "decir", type: "ir", english: "say/tell" }
+  { infinitive:"hablar", type:"ar" },
+  { infinitive:"comer", type:"er" },
+  { infinitive:"vivir", type:"ir" },
+  { infinitive:"ir", type:"ir" },
+  { infinitive:"ser", type:"ir" },
+  { infinitive:"estar", type:"ar" },
+  { infinitive:"ver", type:"er" },
+  { infinitive:"tener", type:"er" },
+  { infinitive:"hacer", type:"er" },
+  { infinitive:"venir", type:"ir" },
+  { infinitive:"decir", type:"ir" }
 ];
 
+// ------------------ TENSES ------------------
 const tenses = {
   present: {
-    endings: { ar:["o","as","a","amos","áis","an"], er:["o","es","e","emos","éis","en"], ir:["o","es","e","imos","ís","en"] },
+    endings: {
+      ar:["o","as","a","amos","áis","an"],
+      er:["o","es","e","emos","éis","en"],
+      ir:["o","es","e","imos","ís","en"]
+    },
     irregulars: {
       ir:["voy","vas","va","vamos","vais","van"],
       ser:["soy","eres","es","somos","sois","son"],
-      ver:["veo","ves","ve","vemos","veis","ven"],
+      estar:["estoy","estás","está","estamos","estáis","están"],
       tener:["tengo","tienes","tiene","tenemos","tenéis","tienen"],
       hacer:["hago","haces","hace","hacemos","hacéis","hacen"],
       venir:["vengo","vienes","viene","venimos","venís","vienen"],
@@ -94,18 +68,28 @@ const tenses = {
     }
   },
   imperfect: {
-    endings: { ar:["aba","abas","aba","ábamos","abais","aban"], er:["ía","ías","ía","íamos","íais","ían"], ir:["ía","ías","ía","íamos","íais","ían"] },
+    endings: {
+      ar:["aba","abas","aba","ábamos","abais","aban"],
+      er:["ía","ías","ía","íamos","íais","ían"],
+      ir:["ía","ías","ía","íamos","íais","ían"]
+    },
     irregulars: {
       ir:["iba","ibas","iba","íbamos","ibais","iban"],
       ser:["era","eras","era","éramos","erais","eran"],
+      estar:["estaba","estabas","estaba","estábamos","estabais","estaban"],
       ver:["veía","veías","veía","veíamos","veíais","veían"]
     }
   },
   preterite: {
-    endings: { ar:["é","aste","ó","amos","asteis","aron"], er:["í","iste","ió","imos","isteis","ieron"], ir:["í","iste","ió","imos","isteis","ieron"] },
+    endings: {
+      ar:["é","aste","ó","amos","asteis","aron"],
+      er:["í","iste","ió","imos","isteis","ieron"],
+      ir:["í","iste","ió","imos","isteis","ieron"]
+    },
     irregulars: {
       ir:["fui","fuiste","fue","fuimos","fuisteis","fueron"],
       ser:["fui","fuiste","fue","fuimos","fuisteis","fueron"],
+      estar:["estuve","estuviste","estuvo","estuvimos","estuvisteis","estuvieron"],
       ver:["vi","viste","vio","vimos","visteis","vieron"],
       tener:["tuve","tuviste","tuvo","tuvimos","tuvisteis","tuvieron"],
       hacer:["hice","hiciste","hizo","hicimos","hicisteis","hicieron"],
@@ -115,163 +99,84 @@ const tenses = {
   }
 };
 
-const pronouns = [
-  { spanish:"yo", english:"I" },
-  { spanish:"tú", english:"You (sing.)" },
-  { spanish:"él/ella", english:"He/She" },
-  { spanish:"nosotros", english:"We" },
-  { spanish:"vosotros", english:"You (pl.)" },
-  { spanish:"ellos", english:"They" }
-];
+// ------------------ PRONOUNS ------------------
+const pronouns = ["I","You","He/She","We","You (pl.)","They"];
 
-// --- English tenses with subtle hints for imperfect vs preterite ---
-const englishTenses = {
-  hablar: { 
-    present:["speak","speak","speaks","speak","speak","speak"], 
-    imperfect:["was speaking","were speaking","was speaking","were speaking","were speaking","were speaking"], 
-    preterite:["spoke","spoke","spoke","spoke","spoke","spoke"] 
+// ------------------ ENGLISH PROMPTS ------------------
+const englishPrompts = {
+  default: {
+    present:["","", "s","","",""],
+    imperfect:["was doing","were doing","was doing","were doing","were doing","were doing"],
+    preterite:["did","did","did","did","did","did"]
   },
-  comer: { 
-    present:["eat","eat","eats","eat","eat","eat"], 
-    imperfect:["was eating","were eating","was eating","were eating","were eating","were eating"], 
-    preterite:["ate","ate","ate","ate","ate","ate"] 
+  ser: {
+    imperfect:["was (description)","were (description)","was (description)","were (description)","were (description)","were (description)"],
+    preterite:["was (what happened)","were (what happened)","was (what happened)","were (what happened)","were (what happened)","were (what happened)"]
   },
-  vivir: { 
-    present:["live","live","lives","live","live","live"], 
-    imperfect:["was living","were living","was living","were living","were living","were living"], 
-    preterite:["lived","lived","lived","lived","lived","lived"] 
-  },
-  ir: { 
-    present:["go","go","goes","go","go","go"], 
-    imperfect:["was going (ongoing)","were going (ongoing)","was going (ongoing)","were going (ongoing)","were going (ongoing)","were going (ongoing)"], 
-    preterite:["went","went","went","went","went","went"] 
-  },
-  ser: { 
-    present:["am","are","is","are","are","are"], 
-    imperfect:["was (ongoing)","were (ongoing)","was (ongoing)","were (ongoing)","were (ongoing)","were (ongoing)"], 
-    preterite:["was (completed)","were (completed)","was (completed)","were (completed)","were (completed)","were (completed)"] 
-  },
-  ver: { 
-    present:["see","see","sees","see","see","see"], 
-    imperfect:["was seeing (ongoing)","were seeing (ongoing)","was seeing (ongoing)","were seeing (ongoing)","were seeing (ongoing)","were seeing (ongoing)"], 
-    preterite:["saw","saw","saw","saw","saw","saw"] 
-  },
-  tener: { 
-    present:["have","have","has","have","have","have"], 
-    imperfect:["was having (ongoing)","were having (ongoing)","was having (ongoing)","were having (ongoing)","were having (ongoing)","were having (ongoing)"], 
-    preterite:["had","had","had","had","had","had"] 
-  },
-  hacer: { 
-    present:["do","do","does","do","do","do"], 
-    imperfect:["was doing (ongoing)","were doing (ongoing)","was doing (ongoing)","were doing (ongoing)","were doing (ongoing)","were doing (ongoing)"], 
-    preterite:["did","did","did","did","did","did"] 
-  },
-  venir: { 
-    present:["come","come","comes","come","come","come"], 
-    imperfect:["was coming (ongoing)","were coming (ongoing)","was coming (ongoing)","were coming (ongoing)","were coming (ongoing)","were coming (ongoing)"], 
-    preterite:["came","came","came","came","came","came"] 
-  },
-  decir: { 
-    present:["say","say","says","say","say","say"], 
-    imperfect:["was saying (ongoing)","were saying (ongoing)","was saying (ongoing)","were saying (ongoing)","were saying (ongoing)","were saying (ongoing)"], 
-    preterite:["said","said","said","said","said","said"] 
+  estar: {
+    imperfect:["was (feeling / location)","were (feeling / location)","was (feeling / location)","were (feeling / location)","were (feeling / location)","were (feeling / location)"],
+    preterite:["was (temporary state)","were (temporary state)","was (temporary state)","were (temporary state)","were (temporary state)","were (temporary state)"]
   }
 };
 
-// --- Utilities ---
+// ------------------ UTILS ------------------
 function randomItem(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function removeAccents(str){ return str.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+function removeAccents(s){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
 
-// --- Conjugation ---
-function conjugate(verb, tenseName, personIndex){
-  const tense = tenses[tenseName];
-  if(tense.irregulars[verb.infinitive]) return tense.irregulars[verb.infinitive][personIndex];
+// ------------------ CONJUGATE ------------------
+function conjugate(verb, tense, person){
+  if(tenses[tense].irregulars[verb.infinitive])
+    return tenses[tense].irregulars[verb.infinitive][person];
   const stem = verb.infinitive.slice(0,-2);
-  return stem + tense.endings[verb.type][personIndex];
+  return stem + tenses[tense].endings[verb.type][person];
 }
 
-// --- Speech synthesis ---
-function speakSpanish(text){
-  if('speechSynthesis' in window){
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-ES';
-    let voices = window.speechSynthesis.getVoices();
-    if(voices.length === 0){
-      window.speechSynthesis.onvoiceschanged = () => speakSpanish(text);
-      return;
-    }
-    let preferredVoices = ['Monica','Jorge','Diego','Maria'];
-    let spanishVoice = voices.find(v => preferredVoices.includes(v.name));
-    if(!spanishVoice) spanishVoice = voices.find(v => v.lang.startsWith('es'));
-    if(spanishVoice) utterance.voice = spanishVoice;
-    window.speechSynthesis.speak(utterance);
-  }
-}
-window.addEventListener('load', () => { window.speechSynthesis.getVoices(); });
-
-// --- Session variables ---
+// ------------------ SESSION ------------------
 let currentQuestion = null;
-let sessionCorrect = 0;
-let sessionCount = 0;
-const sessionTotal = 20;
+let correct = 0;
+let total = 0;
 
-// --- Update score ---
-function updateScore(){
-  document.getElementById("score").innerText = `Score: ${sessionCorrect}/${sessionCount}`;
-}
-
-// --- Generate question ---
+// ------------------ NEW QUESTION ------------------
 function newQuestion(){
-  if(sessionCount >= sessionTotal){
-    document.getElementById("prompt").innerText = "Session finished";
-    document.getElementById("answer").style.display = "none";
-    document.querySelectorAll("button").forEach(b => b.style.display = "none");
-    document.getElementById("feedback").innerText += ` Final score: ${sessionCorrect}/${sessionTotal}`;
-    return;
-  }
-
   const verb = randomItem(verbs);
-  const tenseName = randomItem(Object.keys(tenses));
-  const personIndex = Math.floor(Math.random()*pronouns.length);
-  const pronoun = pronouns[personIndex];
+  const tense = randomItem(Object.keys(tenses));
+  const person = Math.floor(Math.random()*6);
 
-  const english = pronoun.english + " " + englishTenses[verb.infinitive][tenseName][personIndex];
-  const correctAnswer = conjugate(verb, tenseName, personIndex);
+  let englishVerb = englishPrompts.default[tense]?.[person] || "";
 
-  currentQuestion = { verb, tenseName, personIndex, correctAnswer };
+  if(englishPrompts[verb.infinitive]?.[tense])
+    englishVerb = englishPrompts[verb.infinitive][tense][person];
+
+  const english = `${pronouns[person]} ${englishVerb}`.trim();
+  const answer = conjugate(verb, tense, person);
+
+  currentQuestion = { answer };
   document.getElementById("prompt").innerText = english;
   document.getElementById("answer").value = "";
   document.getElementById("feedback").innerText = "";
-  updateScore();
+  document.getElementById("score").innerText = `Score: ${correct}/${total}`;
 }
 
-// --- Check answer ---
+// ------------------ CHECK ------------------
 function checkAnswer(){
-  const input = document.getElementById("answer").value.trim().toLowerCase();
-  const tokens = input.split(/\s+/);
-  const userVerb = tokens[tokens.length-1];
-  const normalizedUserVerb = removeAccents(userVerb);
-  const normalizedCorrect = removeAccents(currentQuestion.correctAnswer);
+  const input = removeAccents(document.getElementById("answer").value.trim().toLowerCase());
+  const correctAnswer = removeAccents(currentQuestion.answer);
 
-  sessionCount++;
-  if(normalizedUserVerb === normalizedCorrect){
-    sessionCorrect++;
-    document.getElementById("feedback").innerText = `Correct!`;
+  total++;
+  if(input === correctAnswer){
+    correct++;
+    document.getElementById("feedback").innerText = "Correct!";
   } else {
-    document.getElementById("feedback").innerText = `Incorrect. Correct: ${currentQuestion.correctAnswer}`;
+    document.getElementById("feedback").innerText = `Incorrect: ${currentQuestion.answer}`;
   }
-
-  speakSpanish(currentQuestion.correctAnswer);
-  updateScore();
-  setTimeout(newQuestion, 1500);
+  setTimeout(newQuestion,1200);
 }
 
-// --- Enter key support ---
-document.getElementById("answer").addEventListener("keydown", function(event){
-  if(event.key === "Enter") checkAnswer();
+document.getElementById("answer").addEventListener("keydown",e=>{
+  if(e.key==="Enter") checkAnswer();
 });
 
-// --- Start ---
+// START
 newQuestion();
 </script>
 
