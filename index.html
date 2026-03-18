@@ -24,6 +24,7 @@
 </head>
 
 <body>
+
 <h1>Spanish Conjugation Trainer</h1>
 <p id="prompt"></p>
 
@@ -41,17 +42,17 @@
 // ---------------- DATA ----------------
 
 const verbs = [
-  { infinitive:"hablar", type:"ar", english:"speak" },
-  { infinitive:"comer", type:"er", english:"eat" },
-  { infinitive:"vivir", type:"ir", english:"live" },
-  { infinitive:"ir", type:"ir", english:"go" },
-  { infinitive:"ser", type:"irregular", english:"be (identity)" },
-  { infinitive:"estar", type:"irregular", english:"be (state/location)" },
-  { infinitive:"ver", type:"er", english:"see" },
-  { infinitive:"tener", type:"er", english:"have" },
-  { infinitive:"hacer", type:"er", english:"do/make" },
-  { infinitive:"venir", type:"ir", english:"come" },
-  { infinitive:"decir", type:"ir", english:"say/tell" }
+  { infinitive:"hablar", type:"ar" },
+  { infinitive:"comer", type:"er" },
+  { infinitive:"vivir", type:"ir" },
+  { infinitive:"ir", type:"ir" },
+  { infinitive:"ser", type:"irregular" },
+  { infinitive:"estar", type:"irregular" },
+  { infinitive:"ver", type:"er" },
+  { infinitive:"tener", type:"er" },
+  { infinitive:"hacer", type:"er" },
+  { infinitive:"venir", type:"ir" },
+  { infinitive:"decir", type:"ir" }
 ];
 
 const pronouns = [
@@ -116,29 +117,62 @@ const tenses = {
 };
 
 const englishTenses = {
+  hablar:{
+    present:["speak","speak","speaks","speak","speak","speak"],
+    imperfect:["was speaking","were speaking","was speaking","were speaking","were speaking","were speaking"],
+    preterite:["spoke","spoke","spoke","spoke","spoke","spoke"]
+  },
+  comer:{
+    present:["eat","eat","eats","eat","eat","eat"],
+    imperfect:["was eating","were eating","was eating","were eating","were eating","were eating"],
+    preterite:["ate","ate","ate","ate","ate","ate"]
+  },
+  vivir:{
+    present:["live","live","lives","live","live","live"],
+    imperfect:["was living","were living","was living","were living","were living","were living"],
+    preterite:["lived","lived","lived","lived","lived","lived"]
+  },
+  ir:{
+    present:["go","go","goes","go","go","go"],
+    imperfect:["was going","were going","was going","were going","were going","were going"],
+    preterite:["went","went","went","went","went","went"]
+  },
   ser:{
     present:["am","are","is","are","are","are"],
     imperfect:["was (ongoing identity)","were (ongoing identity)","was (ongoing identity)","were (ongoing identity)","were (ongoing identity)","were (ongoing identity)"],
     preterite:["was (completed event)","were (completed event)","was (completed event)","were (completed event)","were (completed event)","were (completed event)"]
   },
-
   estar:{
     present:["am (state/location)","are (state/location)","is (state/location)","are (state/location)","are (state/location)","are (state/location)"],
     imperfect:["was (ongoing state)","were (ongoing state)","was (ongoing state)","were (ongoing state)","were (ongoing state)","were (ongoing state)"],
     preterite:["was (temporary, completed)","were (temporary, completed)","was (temporary, completed)","were (temporary, completed)","were (temporary, completed)","were (temporary, completed)"]
+  },
+  ver:{
+    present:["see","see","sees","see","see","see"],
+    imperfect:["was seeing","were seeing","was seeing","were seeing","were seeing","were seeing"],
+    preterite:["saw","saw","saw","saw","saw","saw"]
+  },
+  tener:{
+    present:["have","have","has","have","have","have"],
+    imperfect:["was having","were having","was having","were having","were having","were having"],
+    preterite:["had","had","had","had","had","had"]
+  },
+  hacer:{
+    present:["do","do","does","do","do","do"],
+    imperfect:["was doing","were doing","was doing","were doing","were doing","were doing"],
+    preterite:["did","did","did","did","did","did"]
+  },
+  venir:{
+    present:["come","come","comes","come","come","come"],
+    imperfect:["was coming","were coming","was coming","were coming","were coming","were coming"],
+    preterite:["came","came","came","came","came","came"]
+  },
+  decir:{
+    present:["say","say","says","say","say","say"],
+    imperfect:["was saying","were saying","was saying","were saying","were saying","were saying"],
+    preterite:["said","said","said","said","said","said"]
   }
 };
-
-// Regular verbs reuse the same pattern
-["hablar","comer","vivir","ir","ver","tener","hacer","venir","decir"].forEach(v=>{
-  if(!englishTenses[v]){
-    englishTenses[v]={
-      present:["","","","","",""],
-      imperfect:["was ___ing (ongoing)","were ___ing (ongoing)","was ___ing (ongoing)","were ___ing (ongoing)","were ___ing (ongoing)","were ___ing (ongoing)"],
-      preterite:["___ (completed)","___ (completed)","___ (completed)","___ (completed)","___ (completed)","___ (completed)"]
-    };
-  }
-});
 
 // ---------------- LOGIC ----------------
 
@@ -214,7 +248,10 @@ function checkAnswer(){
   setTimeout(newQuestion,1200);
 }
 
-answer.addEventListener("keydown",e=>{ if(e.key==="Enter") checkAnswer(); });
+answer.addEventListener("keydown",e=>{
+  if(e.key==="Enter") checkAnswer();
+});
+
 newQuestion();
 </script>
 
